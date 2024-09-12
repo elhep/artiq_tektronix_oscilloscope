@@ -35,6 +35,13 @@ class Tektronix4SeriesScope:
                 raise TimeoutError("Scope did not become idle within the timeout period")
             time.sleep(0.1)
 
+    def ping(self):
+        idn = self.identify()
+        if idn.startswith("TEKTRONIX"):
+            return True
+        else:
+            logger.error(f"Ping failed, invalid identification: {idn}")
+
     def reset(self):
         self.debug("Resetting scope")
         self.scope.write('*RST')

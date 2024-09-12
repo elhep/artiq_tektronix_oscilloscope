@@ -43,7 +43,7 @@ class Tektronix4SeriesScope:
             logger.error(f"Ping failed, invalid identification: {idn}")
 
     def reset(self):
-        self.debug("Resetting scope")
+        logger.debug("Resetting scope")
         self.scope.write('*RST')
         self.wait_for_idle(20)
 
@@ -112,6 +112,11 @@ class Tektronix4SeriesScope:
     def set_horizontal_scale(self, scale):
         logger.debug(f"Setting horizontal scale to {scale}")
         self.scope.write(f"HORizontal:SCAle {scale:.3g}")
+
+    def set_horizontal_position(self, position):
+        logger.debug(f"Setting horizontal position to {position}")
+        self.scope.write(f"HORizontal:DELay:TIMe {position:.3g}")
+
 
     def set_trigger(self, channel, level=0.0, slope="RISE", mode="NORMAL"):
         assert mode in ['NORMAL', 'AUTO'], "Invalid trigger mode"

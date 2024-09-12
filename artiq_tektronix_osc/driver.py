@@ -62,6 +62,17 @@ class Tektronix4SeriesScope:
         self.scope.write(f"DATE \"{current_date}\"")
         self.scope.write(f"TIME \"{current_time}\"")
 
+    # Acquisition operations
+
+    def start_acquisition(self):
+        logger.debug("Preparing acquisition")
+        self.scope.write("ACQuire:STOPAfter SEQuence")
+        self.scope.write("ACQuire:STATE ON")
+
+    def stop_acquisition(self):
+        logger.debug("Stopping acquisition")
+        self.scope.write("ACQuire:STATE OFF")
+
     # Channel operations
 
     def set_channel_vertical_scale(self, channel, scale):
@@ -117,11 +128,11 @@ class Tektronix4SeriesScope:
         logger.debug(f"Setting horizontal position to {position}")
         self.scope.write(f"HORizontal:DELay:TIMe {position:.3g}")
 
-
     def set_trigger(self, channel, level=0.0, slope="RISE", mode="NORMAL"):
         assert mode in ['NORMAL', 'AUTO'], "Invalid trigger mode"
         assert slope in ['RISE', 'FALL'], "Invalid trigger slope"
         logger.debug(f"Setting trigger to channel {channel}, level {level}, slope {slope}, mode {mode}")
+        self.stop_acquisition()
         self.scope.write(f"TRIGger:A:MODE {mode}")
         self.scope.write(f"TRIGger:A:EDGE:SLOPe {slope}")
         self.scope.write(f"TRIGger:A:EDGE:SOURce CH{channel}")

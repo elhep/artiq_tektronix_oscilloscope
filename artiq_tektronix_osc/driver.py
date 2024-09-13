@@ -43,6 +43,8 @@ class Tektronix4SeriesScope:
             time.sleep(0.1)
 
     def ping(self):
+        if self._simulation:
+            return True
         idn = self.identify()
         if idn.startswith("TEKTRONIX"):
             return True

@@ -14,6 +14,9 @@ class Tektronix4SeriesScope:
         self._simulation = simulation
     
     def __enter__(self):
+        if self._simulation:
+            logger.info("Running in simulation mode")
+            return self
         rm = pyvisa.ResourceManager()
         self.scope = rm.open_resource(f"TCPIP::{self.ip_address}::INSTR")
         logger.info(f"Connected to scope at {self.ip_address}")
@@ -21,6 +24,9 @@ class Tektronix4SeriesScope:
         return self
     
     def __exit__(self, exc_type, exc_value, traceback):
+        if self._simulation:
+            logger.info("Running in simulation mode")
+            return self
         self.scope.close()
 
     def identify(self):

@@ -9,8 +9,9 @@ logger = logging.getLogger("tektronix_osc")
 
 class Tektronix4SeriesScope:
 
-    def __init__(self, ip_address):
+    def __init__(self, ip_address, simulation: bool=False):
         self.ip_address = ip_address
+        self._simulation = simulation
     
     def __enter__(self):
         rm = pyvisa.ResourceManager()

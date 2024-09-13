@@ -9,6 +9,8 @@ def get_argparser():
     parser = argparse.ArgumentParser(
         description="ARTIQ controller for the Andor iXon Ultra 897 camera.")
     parser.add_argument("--ip", required=True, help="IP address of the oscilloscope")
+    parser.add_argument("-s", "--simulation", action="store_true",
+                        help="Run in simulation mode")
     common_args.simple_network_args(parser, 3253)
     common_args.verbosity_args(parser)
     return parser
@@ -18,7 +20,7 @@ def main():
     args = get_argparser().parse_args()
     common_args.init_logger_from_args(args)
     logger.info(f"Starting NDSP controller...")
-    with Tektronix4SeriesScope(args.ip) as scope:
+    with Tektronix4SeriesScope(args.ip, simulation=args.simulation) as scope:
         simple_server_loop({"scope": scope},
                            common_args.bind_address_from_args(args), args.port)
 

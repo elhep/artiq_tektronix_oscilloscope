@@ -2,6 +2,7 @@ import pyvisa
 import datetime
 import time
 import logging
+from time import sleep
 
 
 logger = logging.getLogger("tektronix_osc")
@@ -146,3 +147,24 @@ class Tektronix4SeriesScope:
         self.scope.write(f"TRIGger:A:EDGE:SLOPe {slope}")
         self.scope.write(f"TRIGger:A:EDGE:SOURce CH{channel}")
         self.scope.write(f"TRIGger:A:LEVel {level:.3g}")
+
+    # One to rule them all
+
+    def setup(self, channel_configs, horizontal_scale, horizontal_position, trigger_config):
+        self.reset()
+        self.set_current_datetime()
+
+        for ch_cfg in channel_configs:
+            self.set_channel(**ch_cfg)
+        
+        # Waveform time will be 10*horizontal scale
+        self.set_horizontal_scale(horizontal_scale)
+        self.set_horizontal_position(horizontal_position)
+
+        # Slope: RISE/FALL
+        # Mode: NORMAL/AUTO
+        self.set_trigger(**trigger_config)
+        self.start_acquisition()
+
+        # Wait for the scope to be ready
+        sleep(3)

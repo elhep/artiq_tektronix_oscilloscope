@@ -245,3 +245,4 @@ class Tektronix4SeriesScope:
             return
         self.scope.write(";".join(self.op_queue))
         self.clear_queue()
+        sleep(3)

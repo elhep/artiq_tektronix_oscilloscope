@@ -60,6 +60,7 @@ class Tektronix4SeriesScope:
         self.debug("Resetting scope", queue)
         if queue:
             self.op_queue.append('*RST')
+            self.op_queue.append('*ESE 1')
             self.op_queue.append('*WAI')
         else:
             self.scope.write('*RST')

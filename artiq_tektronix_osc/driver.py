@@ -240,6 +240,7 @@ class Tektronix4SeriesScope:
         self.op_queue = []
 
     def run_queue(self):
+        self.debug("Running queued operations", False)
         if self._simulation:
             logger.info("Running in simulation mode")
             return

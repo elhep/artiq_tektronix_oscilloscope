@@ -66,7 +66,7 @@ class Tektronix4SeriesScope:
             self.wait_for_idle(20)
 
     def get_screen_png(self):
-        self.debug("Saving screen to PNG")
+        self.debug("Saving screen to PNG", False)
         self.scope.write(";".join([
             "SAVe:IMAGe:FILEFormat PNG",
             "SAVe:IMAGe:INKSaver OFF",

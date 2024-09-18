@@ -217,7 +217,7 @@ class Tektronix4SeriesScope:
 
     # One to rule them all
 
-    def setup(self, channel_configs, horizontal_scale, horizontal_position, trigger_config, queue=False):
+    def setup(self, channel_configs, horizontal_scale, horizontal_position, trigger_config, queue=False, sleep_time=3):
         self.reset(queue)
         self.set_current_datetime(queue)
 
@@ -235,12 +235,12 @@ class Tektronix4SeriesScope:
 
         if not queue:
             # Wait for the scope to be ready
-            sleep(3)
+            sleep(sleep_time)
 
     def clear_queue(self):
         self.op_queue = []
 
-    def run_queue(self):
+    def run_queue(self, sleep_time=3):
         self.debug("Running queued operations", False)
         if self._simulation:
             logger.info("Running in simulation mode")
@@ -250,4 +250,4 @@ class Tektronix4SeriesScope:
         self.debug(f"Running command: {command}", False)
         self.scope.write(";".join(self.op_queue))
         self.clear_queue()
-        sleep(3)
+        sleep(sleep_time)

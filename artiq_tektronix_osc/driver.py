@@ -20,6 +20,7 @@ class Tektronix4SeriesScope:
             logger.info("Running in simulation mode")
             return self
         rm = pyvisa.ResourceManager()
+        print(self.ip_address)
         self.scope = rm.open_resource(f"TCPIP::{self.ip_address}::INSTR")
         logger.info(f"Connected to scope at {self.ip_address}")
         logger.info(f"Scope identification: {self.identify()}")
@@ -68,10 +69,9 @@ class Tektronix4SeriesScope:
 
     def get_screen_png(self):
         self.debug("Saving screen to PNG", False)
-        self.scope.write(";".join([
-            "SAVe:IMAGe:FILEFormat PNG",
-            "SAVe:IMAGe:INKSaver OFF",
-            "HARDCopy STARt"]))
+        self.scope.write("SAVe:IMAGe:FILEFormat PNG")
+        self.scope.write("SAVe:IMAGe:INKSaver OFF")
+        self.scope.write("HARDCopy STARt")
         return self.scope.read_raw()
     
     def set_current_datetime(self, queue=False):
@@ -245,6 +245,9 @@ class Tektronix4SeriesScope:
         if self._simulation:
             logger.info("Running in simulation mode")
             return
+        self.op_queue = [f":{cmd}" if not cmd.startswith('*') else cmd for cmd in self.op_queue]
+        command = ";".join(self.op_queue)
+        self.debug(f"Running command: {command}", False)
         self.scope.write(";".join(self.op_queue))
         self.clear_queue()
         sleep(3)

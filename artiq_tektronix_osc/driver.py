@@ -215,9 +215,10 @@ class Tektronix4SeriesScope:
 
     # One to rule them all
 
-    def setup(self, channel_configs, horizontal_scale, horizontal_position, trigger_config, queue=False, sleep_time=3):
-        self.reset(queue)
-        self.set_current_datetime(queue)
+    def setup(self, channel_configs, horizontal_scale, horizontal_position, trigger_config, reset=True, queue=False, sleep_time=3):
+        if reset:
+            self.reset(queue)
+            self.set_current_datetime(queue)
 
         for ch_cfg in channel_configs:
             self.set_channel(**ch_cfg, queue=queue)

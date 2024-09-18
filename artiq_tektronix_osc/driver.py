@@ -69,9 +69,7 @@ class Tektronix4SeriesScope:
 
     def get_screen_png(self):
         self.debug("Saving screen to PNG", False)
-        self.scope.write("SAVe:IMAGe:FILEFormat PNG")
-        self.scope.write("SAVe:IMAGe:INKSaver OFF")
-        self.scope.write("HARDCopy STARt")
+        self.scope.write("SAVe:IMAGe:FILEFormat PNG; :SAVe:IMAGe:INKSaver OFF; :HARDCopy STARt")
         return self.scope.read_raw()
     
     def set_current_datetime(self, queue=False):

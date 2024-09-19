@@ -84,7 +84,7 @@ class Tektronix4SeriesScope:
         if queue:
             self.op_queue.extend(ops)
         else:
-            self.scope.write(";".join())
+            self.scope.write(";".join(ops))
 
     # Acquisition operations
 
